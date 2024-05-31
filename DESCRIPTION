@@ -1,0 +1,42 @@
+Package: AMOCATI
+Title: AMOCATI: Algorithmic Meta-analysis Of Clinical And Transcriptomic Information
+Version: 1.0
+Authors@R: 
+    person("Paul", "Régnier", , "paul.regnier@aphp.fr", role = c("aut", "cre"),
+           comment = c(ORCID = "0000-0002-9713-1132"))
+Description: AMOCATI is a workflow which aims to statistically quantify the impact of each gene on the overall survival of patients, notably using a bootstrapping approach. This workflow also contains functions to get data from the GDC repository, which consist of thousands of bulk RNA-Seq samples coming from dozens of distinct tumor sites. Furthermore, AMOCATI allows to extract the gene signatures that impact the most the overall survival of patients, which provides an interesting way to study the transcriptomic differences between Long-Term and Short-Term Survivors.   
+License: GPL (>= 3)
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.3.1
+Imports:
+    data.table,
+    survival,
+    tcltk,
+    foreach,
+    stats,
+    ggplot2,
+    parallel,
+    zip,
+    XML,
+    GenomicDataCommons,
+    R.utils,
+    biomaRt,
+    doSNOW,
+    itertools,
+    readxl,
+    ROCit,
+    graphics,
+    grDevices,
+    dplyr,
+    survRM2,
+    DESeq2,
+    S4Vectors,
+    SummarizedExperiment
+Suggests:
+    knitr,
+    rmarkdown,
+    testthat (>= 3.0.0)
+VignetteBuilder: knitr
+URL: https://github.com/PaulRegnier/AMOCATI
+BugReports: https://github.com/PaulRegnier/AMOCATI/issues

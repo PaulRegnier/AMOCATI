@@ -1,0 +1,19 @@
+---
+title: "Tutorial"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Tutorial}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+For the sake of maintenance and readability, the tutorial is fully and freely accessible here: https://paul-regnier.fr/tutoriel-amocati/.
+
+Thank you for your understanding!
