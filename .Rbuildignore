@@ -1,1 +1,3 @@
 source.Rproj
+^.*\.Rproj$
+^\.Rproj\.user$
