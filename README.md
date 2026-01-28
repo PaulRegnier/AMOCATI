@@ -10,5 +10,5 @@ Feel free to contact me (paul.regnier@aphp.fr or paul.jb.regnier@gmail.com) if y
 # Citation
 
 If you used _AMOCATI_ for your analyses, we kindly encourage you to cite our related bioRxiv manuscript:
-- bioRxiv: XXX
-- DOI: XXX
+- bioRxiv: https://www.biorxiv.org/content/10.1101/2024.06.18.596859
+- DOI: https://doi.org/10.1101/2024.06.18.596859
