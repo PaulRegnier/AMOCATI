@@ -12,7 +12,7 @@ resetWorkspace = function(eraseEntireRMemory = FALSE, verbose = TRUE)
 {
   if(verbose == TRUE)
   {
-    print("## Reset of the workspace : emptying and recreating folders ##")
+    print("## Reset of the workspace: emptying and recreating folders ##")
   }
   
   foldersToErase = list.dirs(file.path("output"))

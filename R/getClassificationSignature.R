@@ -43,7 +43,7 @@ getClassificationSignature = function(GeneScoreThreshold = NULL, Gene_SNR_Expres
   {
     if(verbose == TRUE)
     {
-      print("## One or more thresholds missing : only showing plot ##")
+      print("## One or more thresholds missing: only showing plot ##")
     }
     
     rawPlot = ggplot2::ggplot(metaResults_allGenesPooled, ggplot2::aes(x = GeneScore, y = Gene_SNR_Expression) ) +
@@ -53,7 +53,9 @@ getClassificationSignature = function(GeneScoreThreshold = NULL, Gene_SNR_Expres
       ggplot2::ylab("log(Gene SNR Expression)") +
       ggplot2::theme_bw()
     
-    plot(rawPlot)
+    grDevices::pdf(file = file.path("output", "signatures", "classificationSignature_plot.pdf"))
+    print(rawPlot)
+    grDevices::dev.off()
   } else
   {
     
@@ -68,14 +70,16 @@ getClassificationSignature = function(GeneScoreThreshold = NULL, Gene_SNR_Expres
       ggplot2::scale_fill_continuous(type = "viridis") +
       ggplot2::xlab("log(GeneScore)") +
       ggplot2::ylab("log(Gene SNR Expression)") +
-      ggplot2::geom_hline(yintercept = Gene_SNR_ExpressionThreshold, linetype = "dashed", color = "red", size = 1) +
-      ggplot2::geom_vline(xintercept = GeneScoreThreshold, linetype = "dashed", color = "red", size = 1) +
-      ggplot2::ggtitle(paste("Gene Score threshold : log = ", GeneScoreThreshold, ", original = ", round(exp(1)^GeneScoreThreshold, digits = 3), "\n", "Gene SNR Expression threshold : log =  ", Gene_SNR_ExpressionThreshold, ", original = ", round(exp(1)^Gene_SNR_ExpressionThreshold, digits = 3), "\n", "Number of genes that passed both thresholds = ", genesNumber, sep = "")) +
+      ggplot2::geom_hline(yintercept = Gene_SNR_ExpressionThreshold, linetype = "dashed", color = "red", linewidth = 1) +
+      ggplot2::geom_vline(xintercept = GeneScoreThreshold, linetype = "dashed", color = "red", linewidth = 1) +
+      ggplot2::ggtitle(paste("Gene Score threshold: log = ", GeneScoreThreshold, ", original = ", round(exp(1)^GeneScoreThreshold, digits = 3), "\n", "Gene SNR Expression threshold: log =  ", Gene_SNR_ExpressionThreshold, ", original = ", round(exp(1)^Gene_SNR_ExpressionThreshold, digits = 3), "\n", "Number of genes that passed both thresholds = ", genesNumber, sep = "")) +
       ggplot2::theme_bw()
     
     classificationSignaturePlot = classificationSignaturePlot + ggplot2::theme(plot.title = ggplot2::element_text(color = "black", size = 12, hjust = 0.5))
     
-    plot(classificationSignaturePlot)
+    grDevices::pdf(file = file.path("output", "signatures", "classificationSignature_plot.pdf"))
+    print(classificationSignaturePlot)
+    grDevices::dev.off()
     
     if(verbose == TRUE)
     {
@@ -96,8 +100,9 @@ getClassificationSignature = function(GeneScoreThreshold = NULL, Gene_SNR_Expres
         print("## Saving plot with thresholds ##")
       }
       
-      ggplot2::ggsave(filename = "classificationSignature_plot.pdf", plot = classificationSignaturePlot, device = "pdf", path = file.path("output", "signatures"))
-      
+      grDevices::pdf(file = file.path("output", "signatures", "classificationSignature_plot.pdf"))
+      print(classificationSignaturePlot)
+      grDevices::dev.off()
     }
   }
   

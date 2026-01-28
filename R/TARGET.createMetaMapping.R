@@ -55,13 +55,13 @@ TARGET.createMetaMapping = function(projectID = NULL, verbose = TRUE)
     print("## Data matching on case UUID (may be long) ##")
   }
   
-  progressBar = tcltk::tkProgressBar(title = "Work in progress, please wait for completion", min = 0, max = length(rownames(targetXlsxData)))
+  progressBar = utils::txtProgressBar(min = 0, max = length(rownames(targetXlsxData)))
   
   i = NULL
   
   foreach::foreach(i = 1:nrow(targetXlsxData)) %do%
     {
-      tcltk::setTkProgressBar(progressBar, i, label = paste(round(i/length(rownames(targetXlsxData))*100, 0), "% done"))
+      utils::setTxtProgressBar(progressBar, i)
       
       currentRowTargetID = as.vector(targetXlsxData[i,]$"TARGET-ID")
       

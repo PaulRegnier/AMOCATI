@@ -128,7 +128,7 @@ createMetaResults = function(selectedGenesOnly = FALSE, signaturesMode = FALSE, 
   
   coresNumber = parallel::detectCores() - as.numeric(unsollicitedCores)
   
-  cl = parallel::makeCluster(coresNumber, type = "PSOCK")
+  cl = parallel::makeCluster(coresNumber, type = "PSOCK", outfile = "log.txt")
   doSNOW::registerDoSNOW(cl)
   
   f = NULL
@@ -144,11 +144,20 @@ createMetaResults = function(selectedGenesOnly = FALSE, signaturesMode = FALSE, 
   samplesNumberToKeep = ceiling(nrow(fullGenesData)/2)
   bootstrapIterationsPerCluster = ceiling(bootstrapIterations/coresNumber)
   
-  bestCutoffsCompilation = foreach::foreach(f = 1:coresNumber, .packages = c("foreach", "tcltk", "survival", "data.table")) %dopar%
+  if(verbose == TRUE)
+  {
+    print("## Beginning the bootstrapping iterations (please follow the progression in the 'log.txt' file) ##")
+  }
+  
+  currentIterator = 0
+  
+  bestCutoffsCompilation = foreach::foreach(f = 1:coresNumber, .packages = c("foreach", "survival", "data.table")) %dopar%
     {
-      pb = tcltk::tkProgressBar(max = bootstrapIterationsPerCluster)
+     # pb = utils::txtProgressBar(max = bootstrapIterationsPerCluster)
       
+
       i = NULL
+      
       
       totalIterationsMatrix = foreach::foreach(i = 1:bootstrapIterationsPerCluster) %do%
         {
@@ -157,8 +166,10 @@ createMetaResults = function(selectedGenesOnly = FALSE, signaturesMode = FALSE, 
           
           x = NULL
           
+          
           currentIterationForCurrentChunk = foreach::foreach(x = 4:ncol(currentBootstrapData)) %do%
           {				
+            
             currentGeneBootstrapData = data.frame(currentBootstrapData[, c(1:3, x)], stringsAsFactors = FALSE)
               
             currentGeneBootstrapData$vitalStatus = as.numeric(currentGeneBootstrapData$vitalStatus)
@@ -228,7 +239,9 @@ createMetaResults = function(selectedGenesOnly = FALSE, signaturesMode = FALSE, 
             {
               currentIterationResults = c(0, 0, 0, 0, 0, 0)
             }
-              
+            
+            print(paste("Overall progress of cluster ", f, " bootstrapping: iteration ", i, "/", bootstrapIterationsPerCluster, "(", round(i/bootstrapIterationsPerCluster*100, 0), "%), gene ", x - 4, "/", (ncol(currentBootstrapData) - 4), " (", round((x - 4)/(ncol(currentBootstrapData) - 4)*100, 0), "%)", sep = ""))
+            
             return(currentIterationResults)
           }
           
@@ -237,13 +250,15 @@ createMetaResults = function(selectedGenesOnly = FALSE, signaturesMode = FALSE, 
           currentIterationMatrix[, 2:7] = currentIterationForCurrentChunk
           currentIterationMatrix[, 8] = i
           
-          tcltk::setTkProgressBar(pb, i, label=paste("Bootstrapping : ", i, "/", bootstrapIterationsPerCluster, " iterations done", sep = ""))
+          #utils::setTxtProgressBar(pb, i, label=paste("Bootstrapping : ", i, "/", bootstrapIterationsPerCluster, " iterations done", sep = ""))
+          
+          
           
           return(currentIterationMatrix)
         }
       
       totalIterationsMatrix = do.call(rbind, totalIterationsMatrix)				
-      close(pb)
+      #close(pb)
       
       totalGeneNames = rep(colnames(currentBootstrapData)[-c(1:3)], bootstrapIterationsPerCluster)
       totalIterationsMatrix = data.frame(cbind(totalGeneNames, totalIterationsMatrix), stringsAsFactors = FALSE)
@@ -272,11 +287,21 @@ createMetaResults = function(selectedGenesOnly = FALSE, signaturesMode = FALSE, 
   cl2 = parallel::makeCluster(coresNumber, type = "PSOCK")
   doSNOW::registerDoSNOW(cl2)
   
+  if(verbose == TRUE)
+  {
+    print("## Summarizing the bootstrapping iterations ##")
+  }
+  
+  ntasks = length(chunks)
+  pb = utils::txtProgressBar(max = ntasks)
+  progress = function(n) utils::setTxtProgressBar(pb, n)
+  opts = list(progress = progress)
+
   g = NULL
   
-  finalMetaResults = foreach::foreach(g = chunks, .packages = c("foreach", "tcltk", "survival", "data.table", "survRM2", "stats")) %dopar%
+  finalMetaResults = foreach::foreach(g = chunks, .packages = c("foreach", "survival", "data.table", "survRM2", "stats"), .options.snow = opts) %dopar%
     {
-      pb2 = tcltk::tkProgressBar(max = length(g))
+      #pb2 = utils::txtProgressBar(max = length(g))
       
       # Debug only :
       # g = nextElem(chunks)
@@ -380,7 +405,7 @@ createMetaResults = function(selectedGenesOnly = FALSE, signaturesMode = FALSE, 
               lty=typeOfDots,
               lwd=weightOfLines,
               log = FALSE,
-              main = paste("Current mRNA : ", currentGene, sep = ""),
+              main = paste("Current mRNA: ", currentGene, sep = ""),
             )
             graphics::legend(100, 0.2, legendKeys, lty = 1:1, lwd = 2:2, col = survivalCurvesColors)
             graphics::mtext(legendText, side=3, adj=0.5, cex=0.8)
@@ -500,7 +525,7 @@ createMetaResults = function(selectedGenesOnly = FALSE, signaturesMode = FALSE, 
           
           currentChunkMetaResults[e,] = c(currentAssociatedCutoff, currentGeneClass, currentGeneClass, currentAssociatedSNRExpression, currentGeneDataLowSNR, currentGeneLowLogrankPvalueMean, currentGeneDataHighSNR, currentGeneHighLogrankPvalueMean)
           
-          tcltk::setTkProgressBar(pb2, e, label=paste("Synthesizing : ", round(e/length(g), 2)*100, "% done", sep = ""))
+          #utils::setTxtProgressBar(pb2, e, label=paste("Synthesizing : ", round(e/length(g), 2)*100, "% done", sep = ""))
         }		
       
       rownames(currentChunkMetaResults) = finalRownames
@@ -526,7 +551,7 @@ createMetaResults = function(selectedGenesOnly = FALSE, signaturesMode = FALSE, 
       currentChunkMetaResults$GeneScore = (currentChunkMetaResults$Inter_VS_Low_MeanSNR*(1 - currentChunkMetaResults$Inter_VS_Low_MeanPvalue)) + (currentChunkMetaResults$Inter_VS_High_MeanSNR*(1 - currentChunkMetaResults$Inter_VS_High_MeanPvalue))
       currentChunkMetaResults = currentChunkMetaResults[order(currentChunkMetaResults$GeneScore, decreasing = TRUE),]
       
-      close(pb2)
+      #close(pb2)
       
       return(currentChunkMetaResults)
     }
@@ -588,6 +613,8 @@ createMetaResults = function(selectedGenesOnly = FALSE, signaturesMode = FALSE, 
     unlink(directoriesToDelete, force = TRUE, recursive = TRUE)
     setwd(previouswd)
   }
+  
+  unlink("log.txt", force = TRUE)
   
   sink(file.path("silentOutput.log"))
   gc()

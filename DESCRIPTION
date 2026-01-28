@@ -1,6 +1,6 @@
 Package: AMOCATI
 Title: AMOCATI: Algorithmic Meta-analysis Of Clinical And Transcriptomic Information
-Version: 1.0
+Version: 1.1
 Authors@R: 
     person("Paul", "Régnier", , "paul.regnier@aphp.fr", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0002-9713-1132"))
@@ -8,11 +8,10 @@ Description: AMOCATI is a workflow which aims to statistically quantify the impa
 License: GPL (>= 3)
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.3.1
+RoxygenNote: 7.3.3
 Imports:
     data.table,
     survival,
-    tcltk,
     foreach,
     stats,
     ggplot2,

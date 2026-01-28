@@ -18,10 +18,10 @@ TCGA_CGCI.download = function(projectID = NULL, verbose = TRUE)
   {
     if(length(grep("TCGA", projectID)) > 0)
     {
-      print("## Project type : TCGA ##")
+      print("## Project type: TCGA ##")
     } else if(length(grep("CGCI", projectID)) > 0)
     {
-      print("## Project type : CGCI ##")
+      print("## Project type: CGCI ##")
     } else
     {
       print("## No project type chosen ##")

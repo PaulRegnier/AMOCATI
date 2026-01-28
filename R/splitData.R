@@ -17,7 +17,7 @@ splitData = function(datasetAProportion = 0.5, verbose = TRUE)
     print("## fullData file opening ##")
   }
   
-  fileToLoad = list.files(file.path("output", "data"), pattern = "fullData.data")
+  fileToLoad = list.files(file.path("output", "data"), pattern = "^fullData.data$")
   fullGenesDataPath = file.path("output", "data", fileToLoad)
   fullGenesData = data.table::fread(input = fullGenesDataPath, sep = "\t", header = TRUE, data.table = FALSE)
   

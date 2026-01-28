@@ -77,7 +77,7 @@ applySignature = function(signatureUsed = "classification", distinguishingGenes 
     print("## Opening fullData file ##")
   }
   
-  fileToLoad = list.files(file.path("output", "data"), pattern = "*.data")[1]
+  fileToLoad = list.files(file.path("output", "data"), pattern = "^fullData.data$")
   fullGenesDataPath = file.path("output", "data", fileToLoad)
   fullGenesData = data.table::fread(input = fullGenesDataPath, sep = "\t", header = TRUE, data.table = FALSE)
   
@@ -174,7 +174,7 @@ applySignature = function(signatureUsed = "classification", distinguishingGenes 
           
         } else
         {
-          print(paste("## Distinguishing gene (", distinguishingGene, ") : ", g, "/", length(distinguishingGenesList), " ##", sep = ""))
+          print(paste("## Distinguishing gene (", distinguishingGene, "): ", g, "/", length(distinguishingGenesList), " ##", sep = ""))
           
         }
       }
@@ -184,13 +184,13 @@ applySignature = function(signatureUsed = "classification", distinguishingGenes 
       doSNOW::registerDoSNOW(cl)
       
       ntasks = length(colnames(signaturesToMatch))
-      pb = tcltk::tkProgressBar(max=ntasks)
-      progress = function(n) tcltk::setTkProgressBar(pb, n, label = paste(round(n/ntasks*100, 0), "% done"))
+      pb = utils::txtProgressBar(max=ntasks)
+      progress = function(n) utils::setTxtProgressBar(pb, n)
       opts = list(progress=progress)
       
       z = NULL
       
-      currentGenePooledResults = foreach::foreach(z = seq_len(length(colnames(signaturesToMatch))), .packages = c("foreach", "survival", "tcltk", "data.table", "ggplot2"), .combine=cbind, .options.snow = opts) %dopar%
+      currentGenePooledResults = foreach::foreach(z = seq_len(length(colnames(signaturesToMatch))), .packages = c("foreach", "survival", "data.table", "ggplot2"), .combine=cbind, .options.snow = opts) %dopar%
         {
           currentGeneAllResults = data.frame(matrix("", nrow = length(currentGenePooledResults_rownames), ncol = 1), stringsAsFactors = FALSE)
           signatureToMatch = as.vector(signaturesToMatch[,z])

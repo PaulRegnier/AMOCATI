@@ -113,7 +113,7 @@ TARGET.download = function(projectID = NULL, verbose = TRUE)
   
   if(verbose == TRUE)
   {
-    print("## WARNING : open each clinical data file (xslx format) and check if you need to pool them or not. Then save the file as 'TARGETClinicalData.xslx' ##")
+    print("## WARNING: open each clinical data file (xslx format) and check if you need to pool them or not. Then save the file as 'TARGETClinicalData.xslx' ##")
   }
   
   sink(file.path("silentOutput.log"))

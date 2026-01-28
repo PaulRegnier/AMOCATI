@@ -32,8 +32,8 @@ TCGA_CGCI.pool = function(verbose = TRUE)
   doSNOW::registerDoSNOW(cl)
   
   ntasks = totalCases
-  pb = tcltk::tkProgressBar(max = ntasks)
-  progress = function(n) tcltk::setTkProgressBar(pb, n, label = paste(round(n/ntasks*100, 0), "% done"))
+  pb = utils::txtProgressBar(max = ntasks)
+  progress = function(n) utils::setTxtProgressBar(pb, n)
   opts = list(progress = progress)
   
   b = NULL

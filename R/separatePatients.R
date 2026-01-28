@@ -33,7 +33,7 @@ separatePatients = function(applyFileUsed = "classification", metricToUse = "CS"
       
       if(verbose == TRUE)
       {	
-        print(paste("## Currently working on the class : ", currentSignatureName, " (", a, "/", length(signatureResultsToUseList), ") ##", sep = ""))
+        print(paste("## Currently working on the class: ", currentSignatureName, " (", a, "/", length(signatureResultsToUseList), ") ##", sep = ""))
       }		
       
       if(dir.exists(file.path("output", "class", currentSignatureName)) == TRUE)
@@ -266,7 +266,7 @@ separatePatients = function(applyFileUsed = "classification", metricToUse = "CS"
       
       if(verbose == TRUE)
       {
-        print(paste("## The best cutoff value is : ", bestCutoff, " ##", sep = ""))				
+        print(paste("## The best cutoff value is: ", bestCutoff, " ##", sep = ""))				
       }	
       
       pathToSave = file.path("output", "class", currentSignatureName, paste("fullDataset_SurvivalCurve_Cutoff=", bestCutoff , ".pdf", sep = ""))
@@ -317,8 +317,8 @@ separatePatients = function(applyFileUsed = "classification", metricToUse = "CS"
                           "True Positive Rate (%) = ", round(as.numeric(ROC_plot$"optimal Youden Index point"["TPR"])*100,2), "\n",
                           "False Positive Rate (%) = ", round(as.numeric(ROC_plot$"optimal Youden Index point"["FPR"])*100,2), "\n",
                           
-                          "RMST abs difference (days) : ", round(RMST_high, 2), " (red) - ", round(RMST_low, 2), " (blue) = ", round(finalMetric, 2), "\n",
-                          "Khi2 value between curves : ", survivalTests_khi, " (p-value = ", survivalTests_pValue, ")",
+                          "RMST abs difference (days): ", round(RMST_high, 2), " (red) - ", round(RMST_low, 2), " (blue) = ", round(finalMetric, 2), "\n",
+                          "Khi2 value between curves: ", survivalTests_khi, " (p-value = ", survivalTests_pValue, ")",
                           sep = ""), cex = 0.7)
       )
       
