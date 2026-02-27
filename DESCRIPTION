@@ -1,6 +1,6 @@
 Package: AMOCATI
 Title: AMOCATI: Algorithmic Meta-analysis Of Clinical And Transcriptomic Information
-Version: 1.1
+Version: 1.2
 Authors@R: 
     person("Paul", "Régnier", , "paul.regnier@aphp.fr", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0002-9713-1132"))
